@@ -26,7 +26,8 @@ vim/config/autocmd.vim,$HOME/.vim/config/autocmd.vim
 vim/config/settings.vim,$HOME/.vim/config/settings.vim
 vim/config/mappings.vim,$HOME/.vim/config/mappings.vim
 vim/shell_prompt.sh,$HOME/.shell_prompt.sh
-vim/tmuxline,$HOME/.tmuxline
+vim/tmuxline.laptop,$HOME/.tmuxline,laptop
+vim/tmuxline.nari,$HOME/.tmuxline,nari
 vim/ftdetect,$HOME/.vim/ftdetect
 vim/ftplugin,$HOME/.vim/ftplugin
 vim/plugin,$HOME/.vim/plugin
