@@ -33,7 +33,7 @@ vim/ftplugin,$HOME/.vim/ftplugin
 vim/plugin,$HOME/.vim/plugin
 vim/plugin_magic,$HOME/.vim/bundle/vizardry/plugin/magic
 vim/syntax,$HOME/.vim/syntax
-vim/snippets,$HOME/.vim/snippets
+vim/usnippets,$HOME/.vim/usnippets
 
 # zsh files
 zsh/zshrc,$HOME/.zshrc
