@@ -1,1 +1,0 @@
-map K <Plug>Howdoi
