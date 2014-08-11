@@ -2,6 +2,7 @@
 git/gitconfig,$HOME/.gitconfig
 git/laptop.gitconfig,$HOME/.local.gitconfig,laptop
 git/nari.gitconfig,$HOME/.local.gitconfig,nari
+git/campus.gitconfig,$HOME/.local.gitconfig,campus
 
 # slate files
 slate/slate,$HOME/.slate,laptop
