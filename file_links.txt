@@ -24,6 +24,7 @@ vim/colors,$HOME/.vim/colors
 vim/config/gravelpit.vim,$HOME/.vim/config/local.vim,gravelpit
 vim/config/laptop.vim,$HOME/.vim/config/local.vim,laptop
 vim/config/nari.vim,$HOME/.vim/config/local.vim,nari
+vim/config/campus.vim,$HOME/.vim/config/local.vim,campus
 vim/config/autocmd.vim,$HOME/.vim/config/autocmd.vim
 vim/config/settings.vim,$HOME/.vim/config/settings.vim
 vim/config/mappings.vim,$HOME/.vim/config/mappings.vim
