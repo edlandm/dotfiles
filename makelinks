@@ -7,6 +7,8 @@ from socket import gethostname
 HOSTNAME = gethostname()
 if 'shutupmiles' in HOSTNAME:
     HOSTNAME = 'laptop'
+elif HOSTNAME.startswith('CF'):
+    HOSTNAME = 'campus'
 DOTHOME = expv('$HOME/dotfiles')
 file_links = '{}/file_links.txt'.format(DOTHOME)
 
