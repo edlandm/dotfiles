@@ -40,3 +40,5 @@
 [user]
 	name = edlandm
 	email = edlandm@wwu.edu
+[push]
+	default = simple
