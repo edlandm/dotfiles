@@ -19,6 +19,7 @@ vim/vimrc,$HOME/.vimrc
 vim/bundle_list.laptop.txt,$HOME/.vim/bundle_list.txt,laptop
 vim/bundle_list.nari.txt,$HOME/.vim/bundle_list.txt,nari
 vim/autoload/has.vim,$HOME/.vim/autoload/has.vim
+vim/colors,$HOME/.vim/colors
 vim/config/gravelpit.vim,$HOME/.vim/config/local.vim,gravelpit
 vim/config/laptop.vim,$HOME/.vim/config/local.vim,laptop
 vim/config/nari.vim,$HOME/.vim/config/local.vim,nari
