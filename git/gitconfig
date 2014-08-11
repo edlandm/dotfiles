@@ -37,3 +37,6 @@
 #   git log --grep=<regex> --author=<user> --since=1.month
 # Show commits that mention <regex> AND were written by <user>
 #   git log --all-match --grep=<regex> --author<user>
+[user]
+	name = edlandm
+	email = edlandm@wwu.edu
