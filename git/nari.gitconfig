@@ -1,5 +1,4 @@
 [user]
-    name = Miles Edland
-    username = edlandm
 	email = edlandm@wwu.edu
-
+[push]
+    default = matching
