@@ -10,9 +10,9 @@ initmodule()
         git checkout master
         # Recursively set up any nested subrepos
         if [[ -f .gitmodules ]]; then
-            initmodule()
+            initmodule
         fi
         popd
     done
 }
-initmodule()
+initmodule
