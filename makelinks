@@ -23,7 +23,10 @@ def make_link(source, dest):
             remove(dest)
     except OSError:
         pass
-    symlink(source, dest)
+    try:
+        symlink(source, dest)
+    except OSError:
+        raise OSError('Could not link {} to {}'.format(source, dest))
 
 def _readline(line):
     """
