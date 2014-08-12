@@ -19,6 +19,7 @@ bash/bash_profile,$HOME/.bash_profile
 vim/vimrc,$HOME/.vimrc
 vim/bundle_list.laptop.txt,$HOME/.vim/bundle_list.txt,laptop
 vim/bundle_list.nari.txt,$HOME/.vim/bundle_list.txt,nari
+vim/bundle_list.campus.txt,$HOME/.vim/bundle_list.txt,campus
 vim/autoload/has.vim,$HOME/.vim/autoload/has.vim
 vim/colors,$HOME/.vim/colors
 vim/config/gravelpit.vim,$HOME/.vim/config/local.vim,gravelpit
