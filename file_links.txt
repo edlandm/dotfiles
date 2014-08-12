@@ -16,7 +16,7 @@ tmux/tmux.reset.conf,$HOME/.tmux.reset.conf
 bash/bash_profile,$HOME/.bash_profile
 
 # vim files
-vim/vimrc,$HOME/.vimrc
+vim/config/vimrc,$HOME/.vimrc
 vim/bundle_list.laptop.txt,$HOME/.vim/bundle_list.txt,laptop
 vim/bundle_list.nari.txt,$HOME/.vim/bundle_list.txt,nari
 vim/bundle_list.campus.txt,$HOME/.vim/bundle_list.txt,campus
