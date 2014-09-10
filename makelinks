@@ -5,10 +5,13 @@ from os.path import expandvars as expv, islink, isdir, exists
 from socket import gethostname
 
 HOSTNAME = gethostname()
+DOJOMACHINES = ['starfruit', 'mango', 'pomegranate', 'apple', 'avacado']
 if 'shutupmiles' in HOSTNAME:
     HOSTNAME = 'laptop'
 elif HOSTNAME.startswith('CF'):
     HOSTNAME = 'campus'
+elif HOSTNAME.lower() in DOJOMACHINES:
+    HOSTNAME = 'dojo'
 DOTHOME = expv('$HOME/dotfiles')
 file_links = '{}/file_links.txt'.format(DOTHOME)
 
