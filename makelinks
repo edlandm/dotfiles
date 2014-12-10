@@ -20,7 +20,6 @@ def make_link(source, dest):
     The part that actually links the files
     """
     source = expv(source)
-    print "Linking: {} -> {}".format(source, dest)
     try:
         if isdir(dest):
             rmtree(dest)
@@ -32,6 +31,7 @@ def make_link(source, dest):
         symlink(source, dest)
     except OSError:
         raise OSError('Could not link {} to {}'.format(source, dest))
+    print "Linking: {} -> {}".format(source, dest)
 
 def _readline(line):
     """
@@ -83,6 +83,7 @@ def main():
         return
     with open(expv(file_links), 'r') as f:
         # Filter out blank lines
+        errors = []
         for line in filter(None, (line.rstrip() for line in f)):
             try:
                 source, dest, args = _readline(line)
@@ -103,10 +104,18 @@ def main():
                     continue
 
             if not exists(dest):
-                make_link(source, dest)
+                try:
+                    make_link(source, dest)
+                except OSError as e:
+                    errors.append(e.message)
             else:
                 if check_exists(source, dest) == True:
-                    make_link(source, dest)
+                    try:
+                        make_link(source, dest)
+                    except OSError as e:
+                        errors.append(e.message)
+        for error in errors:
+            print error
 
 if __name__ == '__main__':
     main()
