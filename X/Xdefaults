@@ -1,0 +1,7 @@
+Xterm*background: black
+Xterm*foreground: white
+Xterm*cursorColor: lightgrey
+
+xterm*background: black
+xterm*foreground: white
+xterm*cursorColor: lightgrey

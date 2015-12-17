@@ -1,5 +1,15 @@
-#!/usr/bin/env bash
-xsetroot -solid black &
-xcompmgr &
-xbindkeys
-exec /usr/bin/awesome
+#!/bin/bash
+setxkbmap dvorak -option ctrl:nocaps
+if [ -s ~/.Xmodmap ]; then
+    xmodmap ~/.Xmodmap
+fi
+
+# xcape allows you to make mod keys do things when pressed on their own
+# https://github.com/alols/xcape.git
+if type xcape >/dev/null 2>&1;then
+    xcape -e 'Control_L=Escape'
+fi
+if type xbindkeys >/dev/null 2>&1;then
+    xbindkeys
+fi
+exec awesome -c /home/miles/.config/awesome/rc.lua
