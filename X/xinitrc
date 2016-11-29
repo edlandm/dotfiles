@@ -28,4 +28,9 @@ fi
 if type xflux >/dev/null 2>&1;then
     xflux -z 98312
 fi
+
+# Display cmus current track
+if type cmus_current_track >/dev/null 2>&1;then
+    cmus_current_track &
+fi
 exec awesome -c /home/miles/.config/awesome/rc.lua
