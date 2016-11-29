@@ -23,4 +23,9 @@ fi
 if type syndaemon >/dev/null 2>&1;then
     syndaemon -i 0.25 -K -d
 fi
+
+# flux -- automatically adjust brightness based on time of day (easy on the eyes)
+if type xflux >/dev/null 2>&1;then
+    xflux -z 98312
+fi
 exec awesome -c /home/miles/.config/awesome/rc.lua
