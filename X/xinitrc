@@ -18,4 +18,9 @@ fi
 if type xscreensaver >/dev/null 2>&1;then
     xscreensaver -nosplash &
 fi
+
+# prevents use of the trackpad for a quarter of a second after you stop typing
+if type syndaemon >/dev/null 2>&1;then
+    syndaemon -i 0.25 -K -d
+fi
 exec awesome -c /home/miles/.config/awesome/rc.lua
