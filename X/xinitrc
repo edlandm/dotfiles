@@ -9,7 +9,13 @@ fi
 if type xcape >/dev/null 2>&1;then
     xcape -e 'Control_L=Escape'
 fi
+# Set any custom keybindings
 if type xbindkeys >/dev/null 2>&1;then
     xbindkeys
+fi
+
+# Start xscreensaver server
+if type xscreensaver >/dev/null 2>&1;then
+    xscreensaver -nosplash &
 fi
 exec awesome -c /home/miles/.config/awesome/rc.lua
