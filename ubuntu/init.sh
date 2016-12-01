@@ -33,6 +33,8 @@
 # Music tools: player, volume mormalizer, audio editor, audio converter
 #sudo apt-get cmus mp3gain lame avconv
 # Pip things
-#sudo apt-get install pip pip3
+#curl -o https://bootstrap.pypa.io/get-pip.py Downloads/get-pip.py &&\
+    #sudo python Downloads.get-pip.py &&\
+    #sudo python3 Downloads.get-pip.py &&\
 #sudo pip install ipython
 #sudo pip3 install mps-youtube
