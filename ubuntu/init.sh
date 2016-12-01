@@ -34,4 +34,5 @@
 #sudo apt-get cmus mp3gain lame avconv
 # Pip things
 #sudo apt-get install pip pip3
-#sudo pip install mpsyt ipython
+#sudo pip install ipython
+#sudo pip3 install mps-youtube
