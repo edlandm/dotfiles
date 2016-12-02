@@ -1,0 +1,95 @@
+#!/bin/bash
+
+#function current_player {
+    #current=""
+    #for p in $@; do
+        #case $p in
+            #cmus)
+                #cmus_isplaying=$(cmus-remote -Q | grep 'playing')
+                #if [ -n "$cmus_isplaying" ];then
+                    #current="$current cmus"
+                #fi
+                #;;
+            #pianobar)
+                #piano_isplaying=$()
+                #if [ -n "$piano_isplaying" ];then
+                    #current="$current pianobar"
+                #fi
+                #;;
+            #mps)
+                #mps_isplaying=$()
+                #if [ -n "$mps_isplaying" ];then
+                    #current="$current mps"
+                #fi
+                #;;
+            #*)
+                #;;
+        #esac
+    #done
+    #echo "$current"
+#}
+
+#function now_playing {
+    #playing=""
+    #for p in $@; do
+        #case $p in
+            #cmus)
+                #;;
+            #pianobar)
+                #;;
+            #mps)
+                #;;
+            #*)
+                #;;
+    #done
+#}
+
+while true; do
+#acmus=$(pgrep -x "cmus" > /dev/null &&      echo "cmus")
+#apiano=$(pgrep -x "pianobar" > /dev/null && echo "pianobar")
+#amps=$(pgrep -x "mps" > /dev/null &&        echo "mps")
+
+if pgrep -x "cmus" > /dev/null; then
+    # one of ['', 'stopped', 'paused', 'playing']
+    status=$(cmus-remote -Q | sed -n '/status/p' | cut -c 8-)
+    if [ -z "$status" ]; then
+        echo "nowplaying.text=\"\"" | /usr/bin/awesome-client;
+        sleep 5;
+        continue;
+    else
+        status_span=$status
+        case $status in
+            stopped)
+                status_span="<span color='#FF3333'>$status</span>"
+                ;;
+            paused)
+                status_span="<span color='#CCCC00'>$status</span>"
+                ;;
+        esac
+
+        #title=$(cmus-remote -Q | sed -n 's/tag title \(.*\)/\1/p');
+        title=$(cmus-remote -Q | sed -n 's/file \/.*\/\(.*\).mp3/\1/p');
+        title=$(echo $title | sed 's/\"/\\\"/g' | sed -e 's/\&/and/g'); # escape title
+        position=$(cmus-remote -Q | grep position | sed -n 's/\w\+ \(\d*\)/\1/p');
+        duration=$(cmus-remote -Q | grep duration | sed -n 's/\w\+ \(\d*\)/\1/p');
+        if [ -z $position ] && [ -z $duration ]; then
+            sleep 5;
+            continue;
+        fi
+        dur_color="#FF9"
+        time_left=`expr $duration - $position`
+        if [ $time_left -lt 15 ];then
+            dur_color="#F00"
+        fi
+        echo "nowplaying.text=\"<b>Now $status_span:</b> $title |<span color='"$dur_color"'>" \
+        $position"</span>/<span color='#C90'>$duration</span>\"" \
+        | /usr/bin/awesome-client;
+        sleep 1;
+        continue;
+    fi
+else
+    echo "nowplaying.text=\"\"" | /usr/bin/awesome-client;
+    sleep 5;
+    continue;
+fi
+done
