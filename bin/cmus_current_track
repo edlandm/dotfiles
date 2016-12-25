@@ -67,9 +67,31 @@ if pgrep -x "cmus" > /dev/null; then
                 ;;
         esac
 
-        #title=$(cmus-remote -Q | sed -n 's/tag title \(.*\)/\1/p');
-        title=$(cmus-remote -Q | sed -n 's/file \/.*\/\(.*\).mp3/\1/p');
-        title=$(echo $title | sed 's/\"/\\\"/g' | sed -e 's/\&/and/g'); # escape title
+        # Get song artist/track info
+        fdump=$(cmus-remote -Q);
+        file=$(echo "$fdump" | sed -n 's/file \(.*\)/\1/p');
+        ext=$(echo "$file" | rev | cut -c -3 | rev);
+        songinfo=$(mutagen-inspect "$file");
+        artist='';
+        title='';
+        song='';
+
+        # mp3 and m4a have different tag labels
+        if [ "$ext" = "mp3" ];then
+            artist=$(echo "$songinfo" | sed -n 's/TPE1=\(.*\)/\1/p');
+            title=$(echo "$songinfo" | sed -n 's/TIT2=\(.*\)/\1/p');
+        elif [ "$ext" = "m4a" ];then
+            artist=$(echo "$songinfo" | sed -n 's/.ART=\(.*\)/\1/p');
+            title=$(echo "$songinfo" | sed -n 's/.nam=\(.*\)/\1/p');
+        fi
+
+        if [ -z "$artist" ] || [ -z "$title" ];then
+            # If there aren't any entries for artist or title, fallback to filename
+            song=$(echo ${file##*/} |rev|cut -c 5-|rev);
+        else
+            song="$artist - $title";
+        fi
+
         position=$(cmus-remote -Q | grep position | sed -n 's/\w\+ \(\d*\)/\1/p');
         duration=$(cmus-remote -Q | grep duration | sed -n 's/\w\+ \(\d*\)/\1/p');
         if [ -z $position ] && [ -z $duration ]; then
