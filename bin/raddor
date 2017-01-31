@@ -1,0 +1,3 @@
+#!/bin/bash
+EXPS=$(echo "$@"|sed 's/ / -e /g')
+grep -ie $EXPS /home/miles/Music/added.log
