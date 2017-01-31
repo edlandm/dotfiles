@@ -1,0 +1,68 @@
+#/bin/bash
+# This little bundle of regexes tries its best to make a song look like this:
+#     ARTIST - TITLE.mp3
+# Without the clutter that youtube titles often have. [Official Video], (lyrics), etc
+SONG=$1
+# Brackets to parens
+LBRACKETSTOPARENS='s/[\[\{]/(/g';
+RBRACKETSTOPARENS='s/[\]\}]/)/g';
+# Remove stuff like "(lyrics)" from the title
+REMOVELYRICS='s/(\?.\?\(with \)\?lyrics\?.\?)\?//i';
+REMOVESUBS='s/(\?.\?subtit\(le[sd]\?\)\?\(ulados\)\?.\?)\?//i';
+REMOVEVIDEO='s/(\?.\?video.\?)\?//i';
+REMOVEAUDIO='s/(\?.\?audio.\?)\?//i';
+REMOVEOFFICIAL='s/(\?.\?official.\?)\?//i';
+REMOVEHD='s/(\?.\?h[dq].\?)\?//i'; #Also removes HQ
+# Lowercase the word "cover"
+LOWERCASECOVER='s/\((.*\)Cover\(.*)\)/\1cover\2/';
+# Make sure hyphens are actually hyphens, not unicode bs
+CLEANHYPHENS='s/[—–]/-/g';
+# Turn 'ARTIST- TRACK' into 'ARTIST - TRACK'
+CLEANSEPS='s/\(.\+\)- \(.\+\)/\1 - \2/';
+# Replace ampersands with "and"
+REMOVEAMPS='s/\&/and/g';
+# Remove extra spaces
+NOEXTRASPACES='s/\s\s\+/ /g';
+# Remove any empty parentheses that may be left over
+NOEMPTYPARENS='s/()//g';
+# Remove space before extension
+TRIMTITLE='s/\s\+\(\....\)$/\1/';
+
+# Make sure there aren't any nasty unicode hyphens
+SONG=$(echo "$SONG" | sed "$CLEANHYPHENS");
+# If the filename isn't clearly formatted like: "ARTIST - TRACK"
+# Then it it's maybe using a colon or doesn't have spaces around the
+# hyphen. Let's see what we can do
+if ! echo "$SONG"|grep -q ' - ';then
+    SONG=$(echo "$SONG" | tr ":" "-") # Convert colons to hyphens
+    HYPHENCOUNT=$(echo "$SONG"|tr ' ' '\n'|grep -c "-")
+    if echo "$SONG"|grep -q '-' && [ $HYPHENCOUNT -eq 1 ];then
+        SONG=$(echo "$SONG"|sed 's/-/ - /');
+    # Sometimes there's this pattern: "TITLE by ARTIST"
+    elif  echo "$SONG" | grep -qE '.+ by .+'  &&
+        ! echo "$SONG" | grep -qi cover  &&
+        [ $HYPHENCOUNT -eq 0 ];then
+        SONG=$(echo "$SONG"|sed 's/\(.\+\) by \(.\+\)/\2 - \1/')
+    # Sometimes songs don't have any hyphens or colons, but just several
+    # spaces to separate Artist from Track
+    elif [ $HYPHENCOUNT -eq 0 ] && echo "$SONG"|grep -q '   ';then
+        SONG=$(echo "$SONG"|sed 's/   \+/ - /');
+    fi
+fi
+# And now the rest of the cleaning.
+SONG=$(echo "$SONG" |
+    sed -e "$LBRACKETSTOPARENS" \
+        -e "$RBRACKETSTOPARENS" \
+        -e "$REMOVELYRICS"   \
+        -e "$REMOVESUBS"     \
+        -e "$REMOVEVIDEO"    \
+        -e "$REMOVEAUDIO"    \
+        -e "$REMOVEOFFICIAL" \
+        -e "$REMOVEHD"       \
+        -e "$LOWERCASECOVER" \
+        -e "$CLEANSEPS"      \
+        -e "$REMOVEAMPS"     \
+        -e "$NOEXTRASPACES"  \
+        -e "$NOEMPTYPARENS"  \
+        -e "$TRIMTITLE");
+echo "$SONG";
