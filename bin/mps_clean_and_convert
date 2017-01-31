@@ -1,0 +1,8 @@
+#!/bin/bash
+OLD=$1
+NEW=$(clean_title "$1" |
+    sed -e 's/\.\?m4a$/.mp3/' \
+        -e 's/\.\.mp3/.mp3/');
+echo "Old: $OLD"
+echo "New: $NEW"
+avconv -i "$OLD" "$NEW"
