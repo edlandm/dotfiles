@@ -1,0 +1,5 @@
+#!/bin/bash
+SONG=$1
+EXT=${SONG##*.}
+NEW=$(echo "${SONG%%.*}" | awk -F ' - ' '{print $2" - "$1}')
+mv "$SONG" "$NEW.$EXT"
