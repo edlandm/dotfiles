@@ -1,0 +1,20 @@
+#!/bin/bash
+# Determines if a track is part of an album or single and adds id3 tags accordingly
+TRACK=${1:?"tagtrack: Missing TRACK operand"};
+TOTALTRACKS=$2;
+fn=$(echo "$TRACK"|sed -e 's/.*\///' -e 's/.mp3//' ) # filename
+if [ -n "$TOTALTRACKS" ];then
+    # Tracks in albums are named with this format:
+    #     ARTIST--ALBUM--XX.TITLE  # Where XX is the track number
+    a=${fn%%--*};                            # Artist
+    A=$(echo "${fn#*--}"  | sed 's/--.*//'); # Album
+    T=$(echo "${fn##*--}" | sed 's/\..*//'); # Track Number
+    t=${fn##*--*.};                          # Title
+    mid3v2 -a "$a" -A "$A" -t "$t" -T "$T/$TOTALTRACKS" "$TRACK";
+else
+    # Single tracks are named with the following format:
+    #     ARTIST - TITLE.mp3
+    a=${fn%% - *}; # ARTIST
+    t=${fn##* - }; # TITLE
+    mid3v2 -a "$a" -t "$t" "$TRACK";
+fi
