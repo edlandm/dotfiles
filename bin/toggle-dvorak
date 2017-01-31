@@ -1,0 +1,11 @@
+#!/bin/bash
+
+KBDVORAK="$(setxkbmap -print | grep dvorak)"
+KBOPTIONS="-option ctrl:nocaps"
+
+if [ "$KBDVORAK" ];then
+    setxkbmap us $KBOPTIONS
+else
+    setxkbmap dvorak $KBOPTIONS
+fi
+paplay /usr/share/sounds/ubuntu/stereo/button-toggle-on.ogg
