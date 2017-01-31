@@ -1,0 +1,9 @@
+#!/bin/sh
+
+KBSTATUS=""
+if [ -n "$(setxkbmap -print | grep dvorak)" ];then
+    KBSTATUS="DV"
+else
+    KBSTATUS="US"
+fi
+echo "kbstatus:set_text(\"$KBSTATUS\")" | /usr/bin/awesome-client;
