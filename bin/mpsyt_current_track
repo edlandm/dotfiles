@@ -1,0 +1,14 @@
+#!/bin/bash
+SONG=$1
+# Clean apostrophes
+# Make artist bold
+# Indicate when song is a cover
+SONG=$(clean_title "$SONG" |
+    sed -e "s/'/\\\'/g" \
+        -e 's/\(.\+\)- \(.\+\)/<b>\1<\/b> - \2/' \
+        -e 's/\(.*\)\((.*cover.*)\)\(.*\)/\\\
+            \1<\/span><span color="#66FF66">\2<\/span><span color="#FFFF00">\3/i');
+
+pkill cmus_curr
+echo "nowplaying:set_markup('<span color=\"#FFFF00\">$SONG</span>')" |
+    /usr/bin/awesome-client;
