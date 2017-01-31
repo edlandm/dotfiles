@@ -1,0 +1,28 @@
+#!/bin/bash
+
+if pgrep -x "cmus" > /dev/null; then
+    fdump=$(cmus-remote -Q);
+    file=$(echo "$fdump" | sed -n 's/file \(.*\)/\1/p');
+    ext=${file##*.}
+    songinfo=$(mutagen-inspect "$file");
+    artist='';
+    title='';
+    song='';
+    # mp3 and m4a have different tag labels
+    if [ "$ext" = "mp3" ];then
+        artist=$(echo "$songinfo" | sed -n 's/TPE1=\(.*\)/\1/p');
+        title=$(echo "$songinfo" | sed -n 's/TIT2=\(.*\)/\1/p');
+    elif [ "$ext" = "m4a" ];then
+        artist=$(echo "$songinfo" | sed -n 's/.ART=\(.*\)/\1/p');
+        title=$(echo "$songinfo" | sed -n 's/.nam=\(.*\)/\1/p');
+    fi
+
+    # If both artist and title are set, let's look up the lyrics
+    echo "$artist - $title"
+    if [ -n "$artist" ] && [ -n "$title" ];then
+        ldir=$HOME/Lyrics
+        mkdir -p "$ldir/$artist"
+        glyrc lyrics -a "$artist" -t "$title" -w "$ldir/:artist: - :title:.:format:"
+        mv "$ldir/$artist - $title.txt" "$ldir/$artist/"
+    fi
+fi
