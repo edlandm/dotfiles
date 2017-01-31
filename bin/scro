@@ -1,0 +1,13 @@
+#!/bin/bash
+while getopts 's' FLAG;do
+    case $FLAG in
+        s) # Wait for a window to be selected by a mouseclick
+            sleep 0.5;
+            scrot -s '/home/miles/Screenshots/%Y-%m-%d--%T--Screenshot.png' &&
+                paplay /usr/share/sounds/freedesktop/stereo/camera-shutter.oga
+            exit
+            ;;
+    esac
+done
+scrot '/home/miles/Screenshots/%Y-%m-%d--%T--Screenshot.png'
+paplay /usr/share/sounds/freedesktop/stereo/camera-shutter.oga
