@@ -1,0 +1,11 @@
+#!/bin/bash
+INPUT=$@
+echo "$INPUT"
+echo "$INPUT"|
+while read line;do
+    echo "$line"
+    TRIMMED=$(echo "$line"|
+    sed -e 's/^\s\+\(.*\)$/\1/' \
+        -e 's/^\(.\+\)\s\+$/\1/')
+    echo "$TRIMMED"
+done
