@@ -1,0 +1,39 @@
+#!/bin/bash
+# This script goes through a (cmus) playlist file, converts all tracks to mp3
+# (if necessary), and zips together all the tracks and playlist.
+# It also normalizes the volume of all the files in the playlist relative to
+# each other (don't worry, copies are made so the originals stay unaltered)
+
+PLIST="$1" # /path/to/playlist.pl
+DEST="$2"  # /path/to/target/playlist.zip (the basename is used as the name of the .pl file as well)
+BASEDIR=$(basename $DEST)
+TMPDIR=./xx$BASEDIR # the x's make it $wag, as the kids would say
+NEWPLIST=$TMPDIR/$BASEDIR.pl
+
+mkdir $TMPDIR
+touch $NEWPLIST
+IFS=$'\n' # Make sure that the separator is only newlines.
+set -f    # Disable globbing, for some reason not doing this messed everything up
+for line in $(cat "$PLIST");do
+    if [ "${line##*.}" = "m4a" ];then # Convert .m4a to .mp3
+        songinfo=$(mutagen-inspect "$line");
+        artist=$(echo "$songinfo" | sed -n 's/.ART=\(.*\)/\1/p');
+        title=$(echo "$songinfo" | sed -n 's/.nam=\(.*\)/\1/p');
+        song=$(echo "$artist - $title" | sed 's/\&/and/');
+        echo "Converting $song from m4a to mp3"
+        avconv -i "$line" "$TMPDIR/$song.mp3" > /dev/null 2>&1
+        echo "$song.mp3" >> $NEWPLIST
+    else                              # .mp3 files are cool just as they are
+        #echo "Copying $line" # for debugging
+        b=$(basename "$line")
+        cp -H "$line" "$TMPDIR/"
+        echo "$b" >> $NEWPLIST
+    fi
+done
+set +f # Turn globbing back on because we need it for this last bit
+echo "Normalizing volume levels"
+normalize-mp3 -m $TMPDIR/*.mp3
+zip -r $DEST $TMPDIR && # Zip it up and clean up our mess
+    rm -rf $TMPDIR
+
+paplay /usr/share/sounds/ubuntu/notifications/Positive.ogg
