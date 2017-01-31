@@ -1,0 +1,25 @@
+#!/bin/bash
+VERBOSE=false;
+while getopts 'v' FLAG;do
+    case "$FLAG" in
+        v)
+            VERBOSE=true;
+            shift;
+            ;;
+    esac
+done
+TRACK=${1:?"mvtrack: Missing TRACK operand"};
+MUSDIR=${2:?"mvtrack: Missing MUSDIR operand"};
+
+SONGINFO=$(mutagen-inspect "$TRACK");
+ARTIST=$(echo "$SONGINFO" | sed -n 's/TPE1=\(.*\)/\1/p');
+ALBUM=$(echo "$SONGINFO" | sed -n 's/TALB=\(.*\)/\1/p');
+if [ -n "$ALBUM" ];then
+    ALBUM="$ARTIST - $ALBUM"
+else
+    ALBUM="unknown_album"
+fi
+
+mkdir -p "$MUSDIR/$ARTIST/$ALBUM";
+mv "$TRACK" "$MUSDIR/$ARTIST/$ALBUM";
+$VERBOSE && echo "$MUSDIR/$ARTIST/$ALBUM/${TRACK##*/}";
