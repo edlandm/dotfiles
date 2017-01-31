@@ -1,0 +1,35 @@
+#!/bin/bash
+FILE=$1
+# Get song artist/track info
+EXT=${FILE##*.}
+SONGINFO=$(mutagen-inspect "$FILE");
+ARTIST='';
+TITLE='';
+SONG='';
+# mp3 and m4a have different tag labels
+if [ "$EXT" = "mp3" ];then
+    ARTIST=$(echo "$SONGINFO" | sed -n 's/TPE1=\(.*\)/\1/p');
+    TITLE=$(echo "$SONGINFO" | sed -n 's/TIT2=\(.*\)/\1/p');
+elif [ "$EXT" = "m4a" ];then
+    ARTIST=$(echo "$SONGINFO" | sed -n 's/.ART=\(.*\)/\1/p');
+    TITLE=$(echo "$SONGINFO" | sed -n 's/.nam=\(.*\)/\1/p');
+fi
+
+if [ -z "$ARTIST" ] || [ -z "$TITLE" ];then
+    # If there aren't any entries for artist or title, fallback to filename
+    SONG=$(echo ${FILE##*/} |rev|cut -c 5-|rev);
+else
+    SONG="$ARTIST - $TITLE";
+fi
+# Clean apostrophes
+# Make artist bold
+# Indicate when song is a cover
+SONG=$(clean_title "${SONG##*/}" |
+    sed -e "s/'/\\\'/g" \
+        -e 's/\(.\+\) - \(.\+\)/<b>\1<\/b> - \2/' \
+        -e 's/\....$//' \
+        -e 's/\(.*\)\((.*cover.*)\)\(.*\)/\1<\/span><span color="#66FF66">\2<\/span><span color="#CCCCCC">\3/i');
+pkill cmus_curr
+echo "nowplaying:set_markup('<span color=\"#CCCCCC\">$SONG</span>')" |
+    /usr/bin/awesome-client;
+mplayer "$FILE"
